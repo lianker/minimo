@@ -3,11 +3,6 @@ export class Timer {
     var $ = document.querySelector.bind(document);
 
     this.key = "timer";
-    this.timerSpan = $("#timer");
-    this.timerKey = $("#timer-key");
-    this.btnStart = $("#btn-start-timer");
-    this.btnStop = $("#btn-stop-timer");
-
     this.timeListener = null;
 
     this.atachEvent();

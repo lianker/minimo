@@ -18,5 +18,7 @@
     "webpack": "^3.0.0",
     "webpack-dev-server": "^2.5.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "axios": "^0.16.2"
+  }
 }
