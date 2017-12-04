@@ -1,4 +1,4 @@
-export class Timer {
+export default class Timer {
   constructor() {
     var $ = document.querySelector.bind(document);
 
@@ -80,7 +80,3 @@ export class Timer {
     }, 1000);
   }
 }
-
-(function() {
-  window.timer = new Timer();
-})();

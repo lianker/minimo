@@ -1,10 +1,10 @@
-function createBoard(description, phases) {
-  return {
-    description: description,
-    phases: phases
-  };
-}
+export default class Board {
+  constructor(description = "") {
+    this.description = description;
+    this._phases = [];
+  }
 
-function addPhase(board, phase) {
-  board.phases.push(phase);
+  addPhase(phase) {
+    this._phases.push({ index: this._phases.length, phase: phase });
+  }
 }
