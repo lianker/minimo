@@ -3,6 +3,11 @@ export class Timer {
     var $ = document.querySelector.bind(document);
 
     this.key = "timer";
+    this.timerSpan = $("#timer");
+    this.timerKey = $("#timer-key");
+    this.btnStart = $("#btn-start-timer");
+    this.btnStop = $("#btn-stop-timer");
+
     this.timeListener = null;
 
     this.atachEvent();
@@ -11,22 +16,21 @@ export class Timer {
   start() {
     let timer = JSON.parse(localStorage.getItem(this.key));
 
-    if (!timer) {
-      timer = { seconds: 0, enabled: true };
-    }
+    if (!timer) timer = { seconds: 0, enabled: true };
 
     timer.enabled = true;
     localStorage.setItem(this.key, JSON.stringify(timer));
     this.run(timer);
   }
 
-  clean() {
+  cleanListener() {
     clearInterval(this.timeListener);
     this.timeListener = null;
   }
 
   parseSecondsToHours(seconds) {
-    const addZeroLeft = numberToParse => numberToParse.toString().padStart(2, "0");
+    const addZeroLeft = numberToParse =>
+      numberToParse.toString().padStart(2, "0");
 
     const hour = addZeroLeft(Math.trunc(seconds / 3600, 10));
     const minute = addZeroLeft(Math.trunc((seconds % 3600) / 60, 10));
@@ -35,13 +39,15 @@ export class Timer {
     return `${hour}:${minute}:${second}`;
   }
 
+  clear() {
+    const timer = JSON.parse(localStorage.getItem(this.key));
+    timer.seconds = 0;
+    localStorage.setItem(this.key, JSON.stringify(timer));
+  }
+
   atachEvent() {
-    let self = this;
-    window.addEventListener("storage", function(e) {
-      let timer = JSON.parse(e.newValue);
-      if (e.key === "timer") {
-        self.updateScreen(timer);
-      }
+    window.addEventListener("storage", e => {
+      if (e.key === this.key) this.updateScreen(JSON.parse(e.newValue));
     });
   }
 
@@ -56,18 +62,16 @@ export class Timer {
   }
 
   stop() {
-    this.clean();
+    this.cleanListener();
     let timer = JSON.parse(localStorage.getItem(this.key));
     timer.enabled = false;
     localStorage.setItem(this.key, JSON.stringify(timer));
   }
 
-  run(timer, callback) {
-    this.clean();
+  run(timer) {
+    this.cleanListener();
     this.timeListener = setInterval(() => {
-      if (this.isStopped()) {
-        this.stop();
-      }
+      if (this.isStopped()) this.stop();
 
       timer.seconds++;
 
